@@ -1,7 +1,41 @@
-﻿@page "/"
+@page "/"
+@rendermode InteractiveServer
+@inject IStateBox<List<Tasuku>> sessionState
+@inject NavigationManager NavManager
 
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
+<p>Welcome to your new app.</p>
+
+<div>
+    <button class="btn btn-primary" @onclick="NavigateToTaskAddPage">タスク追加</button>
+</div>
+
+<div>
+    <RadzenDataGrid TItem="Tasuku" Data="list" LoadData="LoadTask">
+        <Columns>
+            <RadzenDataGridColumn Title="題名">
+                <Template>
+                    @context.Title
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn Title="期限">
+                <Template>
+                    @context.Deadline.ToString("yyyy-MM-dd")
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn Title="状態">
+                <Template>
+                    @GetState(context.State)
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn Title="内容">
+                <Template>
+                    @context.Contents.Split("\n")[0]
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+</div>

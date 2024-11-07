@@ -1,0 +1,85 @@
+@page "/taskadd"
+@rendermode InteractiveServer
+@inject IStateBox<List<Tasuku>> sessionState
+@inject NavigationManager NavManager
+
+
+<h3>タスクを登録する画面</h3>
+<br />
+
+<EditForm Model="@newTasuku" OnValidSubmit=@NavigateToHomeBySubmit>
+	<DataAnnotationsValidator />
+	<ValidationSummary />
+
+	<p>
+		<label>題名</label>
+		&nbsp;
+		<InputText id="title" @bind-Value="newTasuku.Title" style="width: 450px" />
+	</p>
+	<p>
+		<label>期限</label>
+		&nbsp;
+		<InputDate id="deadline" @bind-Value="newTasuku.Deadline" />
+	</p>
+	<p>
+		<label>状態</label>
+		&nbsp;
+		<InputRadioGroup @bind-Value="newTasuku.State">
+    		<label>
+        		<InputRadio Value="0" />未着手
+    		</label>
+			&nbsp;
+    		<label>
+        		<InputRadio Value="1" />仕掛中
+    		</label>
+			&nbsp;
+    		<label>
+        		<InputRadio Value="2" />完了
+    		</label>
+			&nbsp;
+    		<label>
+        		<InputRadio Value="9" />無視
+    		</label>
+		</InputRadioGroup>
+	</p>
+	<p>
+		<label>内容</label>
+		&nbsp;
+		<InputTextArea cols="50" rows="2" @bind-Value="newTasuku.Contents" style="width: 450px" />
+	</p>
+	<p>
+		<button type="submit" class="btn btn-primary">登録</button>
+		<button class="btn btn-primary" @onclick="NavigateToHomeByCancel">キャンセル</button>
+	</p>
+</EditForm>   
+
+@code {
+	private List<Tasuku> list = default!;
+	private bool sessionExsists => sessionState.HasState;
+
+	private Tasuku newTasuku { get; set; } = new Tasuku(string.Empty, DateTime.Now, 0, string.Empty);
+
+	private void NavigateToHomeBySubmit()
+	{
+		if (sessionExsists)
+		{
+			list = sessionState.State!;
+			list.Add(newTasuku);
+			sessionState.State = list;
+		}
+		else
+		{
+			list ??= new List<Tasuku>
+			{
+				newTasuku
+			};
+			sessionState.State = list;
+		}
+		NavManager.NavigateTo("/");
+	}
+
+	private void NavigateToHomeByCancel()
+	{
+		NavManager.NavigateTo("/");
+	}
+}

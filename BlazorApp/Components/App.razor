@@ -9,12 +9,14 @@
     <link rel="stylesheet" href="app.css" />
     <link rel="stylesheet" href="BlazorApp.styles.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
+    <link href="_content/Radzen.Blazor/css/humanistic-base.css" rel="stylesheet" />
     <HeadOutlet />
 </head>
 
 <body>
     <Routes />
     <script src="_framework/blazor.web.js"></script>
+    <script src="_content/RadzenBlazor/Radzen.Blazor.js?V=@(typeof(Radzen.Colors).Assembly.GetName().Version)"></script>
 </body>
 
 </html>
