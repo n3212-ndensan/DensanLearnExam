@@ -4,86 +4,87 @@ namespace BlazorApp.Components.Pages;
 
 public partial class Home
 {
-    private List<Tasuku> list = default!;
-    bool sessionExsists => sessionState.HasState;
+	protected List<Employee> list = default!;
+	protected bool sessionExsists => sessionState.HasState;
 
-    protected override void OnInitialized()
-    {
-        if (sessionExsists)
-        {
-            list = sessionState.State!;
-		}
-        else
-        {
-            SetInitialTask();
-
-		}
-		var c = new Comparison<Tasuku>(Compare);
-		list.Sort(c);
-	}
-
-    async Task LoadTask()
-    {
-        await Task.Yield();
-
-        if (sessionExsists)
-        {
-            sessionState.State = list;
-            return;
-        }
-    }
-
-    void SetInitialTask()
-    {
-        list ??= new List<Tasuku>
-        {
-            new Tasuku("タスク1", new DateTime(2024, 10, 31), 2, "ああああ"),
-            new Tasuku("タスク2", new DateTime(2024, 11, 30), 1, "いいいいいいい"),
-            new Tasuku("タスク3", new DateTime(2024, 12, 31), 0, "ううう")
-        };
-
-        if (!sessionExsists)
-        {
-            sessionState.State = list;
-        }
-    }
-
-	private void NavigateToTaskAddPage()
-    {
-        NavManager.NavigateTo("taskadd");
-	}
-
-	static string GetState(int state)
+	protected override async Task OnInitializedAsync()
 	{
-		switch (state)
+		if (sessionExsists)
+		{
+			list = sessionState.State!;
+		}
+		else
+		{
+			SetInitialEmployeeList();
+		}
+		var c = new Comparison<Employee>(Compare);
+		list.Sort(c);
+		await Task.CompletedTask;
+	}
+
+	async Task LoadEmployeeListAsync()
+	{
+		await Task.Yield();
+
+		if (sessionExsists)
+		{
+			sessionState.State = list;
+			return;
+		}
+	}
+
+	void SetInitialEmployeeList()
+	{
+		list ??= new List<Employee>
+		{
+			new Employee("電算　一郎", new DateTime(2024, 12, 24), 3, "１部"),
+			new Employee("電算　二郎", new DateTime(2023, 9, 23), 1, "２部"),
+			new Employee("電算　三郎", new DateTime(2024, 4, 1), 0, "総務部"),
+			new Employee("電算　四郎", new DateTime(2023, 9, 22), 1, "人事部"),
+			new Employee("Densan Goro", new DateTime(2024, 12, 25), 3, "３部")
+		};
+
+		if (!sessionExsists)
+		{
+			sessionState.State = list;
+		}
+	}
+
+	private async Task NavigateToEmployeeAddPageAsync()
+	{
+		await Task.Yield(); 
+		NavManager.NavigateTo("employeeadd");
+	}
+
+	static string GetEmploymentTypeName(int employmentType)
+	{
+		switch (employmentType)
 		{
 			case 0:
-				return "未着手";
+				return "正社員";
 			case 1:
-				return "仕掛中";
-			case 2:
-				return "完了";
-			case 9:
-				return "無視";
+				return "嘱託";
+			case 3:
+				return "協力会社";
 			default:
 				return string.Empty;
 		}
-    }
+	}
 
-    static int Compare(Tasuku a, Tasuku b)
+	static int Compare(Employee a, Employee b)
 	{
-        if (a.State != b.State)
-        {
-			return a.State - b.State;
-        }
+		if (a.EmploymentType != b.EmploymentType)
+		{
+			return a.EmploymentType - b.EmploymentType;
+		}
 
-        if( a.Deadline >= b.Deadline)
-        {
-            return 1;
-        }
-        else
-        {
-            return -1;
-        }
-    }
+		if (a.JoiningDate >= b.JoiningDate)
+		{
+			return 1;
+		}
+		else
+		{
+			return -1;
+		}
+	}
 }

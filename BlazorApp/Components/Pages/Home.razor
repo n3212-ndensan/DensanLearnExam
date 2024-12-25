@@ -1,6 +1,6 @@
 @page "/"
 @rendermode InteractiveServer
-@inject IStateBox<List<Tasuku>> sessionState
+@inject IStateBox<List<Employee>> sessionState
 @inject NavigationManager NavManager
 
 <PageTitle>Home</PageTitle>
@@ -10,30 +10,30 @@
 <p>Welcome to your new app.</p>
 
 <div>
-    <button class="btn btn-primary" @onclick="NavigateToTaskAddPage">タスク追加</button>
+    <button class="btn btn-primary" @onclick="NavigateToEmployeeAddPageAsync">社員追加</button>
 </div>
 
 <div>
-    <RadzenDataGrid TItem="Tasuku" Data="list" LoadData="LoadTask">
+    <RadzenDataGrid TItem="Employee" Data="list" LoadData="LoadEmployeeListAsync">
         <Columns>
-            <RadzenDataGridColumn Title="題名">
+            <RadzenDataGridColumn Title="氏名">
                 <Template>
-                    @context.Title
+                    @context.Name
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn Title="期限">
+            <RadzenDataGridColumn Title="入社日">
                 <Template>
-                    @context.Deadline.ToString("yyyy-MM-dd")
+                    @context.JoiningDate.ToString("yyyy-MM-dd")
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn Title="状態">
+            <RadzenDataGridColumn Title="雇用形態">
                 <Template>
-                    @GetState(context.State)
+                    @GetEmploymentTypeName(context.EmploymentType)
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn Title="内容">
+            <RadzenDataGridColumn Title="備考">
                 <Template>
-                    @context.Contents.Split("\n")[0]
+                    @context.Biko.Split("\n")[0]
                 </Template>
             </RadzenDataGridColumn>
         </Columns>

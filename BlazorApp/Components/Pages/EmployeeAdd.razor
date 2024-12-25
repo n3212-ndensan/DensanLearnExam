@@ -1,0 +1,48 @@
+@page "/employeeadd"
+@rendermode InteractiveServer
+
+
+<h3>社員を登録する画面</h3>
+<br />
+
+<EditForm Model="@newEmployee" OnValidSubmit=@NavigateToHomeBySubmitAsync>
+	<DataAnnotationsValidator />
+	<ValidationSummary />
+
+	<p>
+		<label>　　氏名</label>
+		&nbsp;
+		<InputText id="name" @bind-Value="newEmployee.Name" style="width: 450px" />
+	</p>
+	<p>
+		<label>　入社日</label>
+		&nbsp;
+		<InputDate id="joiningDate" @bind-Value="newEmployee.JoiningDate" />
+	</p>
+	<p>
+		<label>雇用形態</label>
+		&nbsp;
+		<InputRadioGroup @bind-Value="newEmployee.EmploymentType">
+    		<label>
+        		<InputRadio Value="0" />正社員
+    		</label>
+			&nbsp;
+    		<label>
+        		<InputRadio Value="1" />嘱託
+    		</label>
+			&nbsp;
+    		<label>
+        		<InputRadio Value="3" />協力会社
+    		</label>
+		</InputRadioGroup>
+	</p>
+	<p>
+		<label>　　備考</label>
+		&nbsp;
+		<InputTextArea cols="50" rows="2" @bind-Value="newEmployee.Biko" style="width: 450px" />
+	</p>
+	<p>
+		<button type="submit" class="btn btn-primary">登録</button>
+		<button class="btn btn-primary" @onclick="NavigateToHomeByCancelAsync">キャンセル</button>
+	</p>
+</EditForm>
